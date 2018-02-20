@@ -4,7 +4,8 @@
   "description": "concert buddies backend",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node ./bin/www",
+    "start:dev": "nodemon ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -26,6 +27,16 @@
     "node": "8.9.4"
   },
   "dependencies": {
-    "express": "^4.16.2"
+    "body-parser": "~1.18.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.15.5",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.0",
+    "nodemon": "^1.15.1",
+    "pg": "^6.4.1",
+    "sequelize": "^4.22.12",
+    "sequelize-cli": "^4.0.0",
+    "serve-favicon": "~2.4.5"
   }
 }

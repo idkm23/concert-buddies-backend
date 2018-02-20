@@ -1,0 +1,15 @@
+{
+  "development": {
+    "use_env_variable": "DATABASE_URL"
+  },
+  "test": {
+    "username": "update me",
+    "password": "update me",
+    "database": "update me",
+    "host": "update me",
+    "dialect": "update me"
+  },
+  "production": {
+    "use_env_variable": "DATABASE_URL"
+  }
+}

@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  h1 Users
+  table
+    tr
+      th id
+      th name
+      th age
+      th gender
+      th pictures(byte string)
+    each user in users
+      tr
+        td
+          = user.id
+        td
+          = user.name
+        td
+          = user.age
+        td
+          = user.gender
+        td
+          = user.pictures
