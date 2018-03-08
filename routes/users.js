@@ -8,7 +8,7 @@ var router = express.Router();
  **/
 router.route('/:user_id')
   .get(function(req, res) {
-    modules.User.findById(req.params.user_id, {}).then(user => {
+    User.findById(req.params.user_id, {}).then(user => {
       res.json(user);
     });
   });
@@ -18,6 +18,7 @@ router.route('/:user_id')
  **/
 router.post('/', function(req, res) {
   User.create({
+    fb_token: req.body.fb_token,
     name: req.body.name,
     dob: req.body.dob,
     gender: req.body.gender
