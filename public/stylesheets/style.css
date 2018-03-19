@@ -1,9 +1,16 @@
+body {
+  margin: 80px;
+}
+
 table, th, td {
   border: 1px solid black;
 }
 
 th, td {
   padding: 5px;
+  overflow: hidden;
+  max-width: 600px;
+  word-wrap: break-word;
 }
 
 table {

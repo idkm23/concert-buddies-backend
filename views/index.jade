@@ -4,23 +4,11 @@ block content
   h1 Users
   table
     tr
-      th id
+      th fb_id
       th fb_token
-      th name
-      th dob
-      th gender
-      th pictures(byte string)
     each user in users
       tr
         td
-          = user.id
+          = user.fb_id
         td
           = user.fb_token
-        td
-          = user.name
-        td
-          = user.dob
-        td
-          = user.gender
-        td
-          = user.pictures

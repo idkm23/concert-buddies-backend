@@ -5,7 +5,7 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
-    user_id: DataTypes.BIGINT,
+    fb_user_id: DataTypes.TEXT,
     event_id: DataTypes.TEXT,
     seq_id: DataTypes.BIGINT,
   });
