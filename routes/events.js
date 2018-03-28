@@ -1,5 +1,6 @@
 var modules = require('../models');
 var User_Attending_Event = modules.User_Attending_Event;
+var Next_User = modules.Next_User;
 var express = require('express');
 var router = express.Router();
 var FB = require('fb');
@@ -40,32 +41,51 @@ router.post('/join', function(req, res) {
         event_id: req.body.event_id,
         fb_user_id: fb_res.id 
       }
-    }).then(user_attending_events => {
-      if (user_attending_events.length != 0) {
+    })
+      .then(user_attending_events => {
+        if (user_attending_events.length != 0) {
+          throw new Error(
+            'Error: user \''
+              + fb_res.id + '\' is already in event \''
+              + req.body.event_id + '\'',
+          );
+
+        // find the next seq_id and add it to the table
+        } else {
+          return User_Attending_Event.findAll({
+            attributes: ['seq_id'],
+            order: [ ['seq_id', 'DESC'] ],
+            where: { event_id: req.body.event_id },
+            limit: 1
+          });
+        }
+      })
+      .then(user_attending_event => {
+        if (user_attending_event.length != 0) {
+          next_seq_id = +user_attending_event[0]["seq_id"];
+          next_seq_id += 1;
+        }
+        createUAE(res, req, fb_res.id, next_seq_id);
+      })
+      .then(() => {
+        Next_User.findOrCreate({
+          where: {
+            fb_id: fb_res.id,
+            event_id: req.body.event_id
+          },
+          defaults: {
+            fb_id: fb_res.id,
+            event_id: req.body.event_id,
+            next_seq_id: 0
+          }
+        });
+      })
+      .catch(err => {
         res.json({
-          message: 'Error: user \''
-            + fb_res.id + '\' is already in event \''
-            + req.body.event_id + '\'',
+          message: err.message,
           req: req.body
         });
-
-      // find the next seq_id and add it to the table
-      } else {
-        User_Attending_Event.findAll({
-          attributes: ['seq_id'],
-          order: [ ['seq_id', 'DESC'] ],
-          where: { event_id: req.body.event_id },
-          limit: 1
-        }).then(user_attending_event => {
-          if (user_attending_event.length != 0) {
-            next_seq_id = +user_attending_event[0]["seq_id"];
-            next_seq_id += 1;
-          }
-
-          createUAE(res, req, fb_res.id, next_seq_id);
-        });
-      }
-    });
+      });
   });
 });
 
