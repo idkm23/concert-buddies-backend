@@ -75,6 +75,10 @@ router.route('/get_potential_matches')
         var profile_count = potential_users.length;
         var i = 0;
         var attempts = 0;
+        if (profile_count == 0) {
+          res.json("{}");
+          return;
+        }
         potential_users.forEach(function(potential_user) {
           var iter_num = i;
           i += 1;
