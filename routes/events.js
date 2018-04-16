@@ -26,6 +26,7 @@ router.route('/list/:fb_user_id')
  * example url: /events/join/
  **/
 router.post('/join', function(req, res) {
+  console.log(req.body);
   FB.setAccessToken(req.body.fb_token);
   FB.api('me/', { fields: ['id'] }, function (fb_res) {
     if(!fb_res || fb_res.error) {
