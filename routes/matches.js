@@ -296,7 +296,9 @@ router.route('/')
         matches_obj.forEach(function(match) {
           matches.push(match['matched_fb_id']);
         });
-        res.json(matches);
+        res.json({
+          "matches": matches
+        });
       })
       .catch(err => {
         res.json({

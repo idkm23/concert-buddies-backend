@@ -18,7 +18,9 @@ router.route('/list/:fb_user_id')
       events.forEach(function(event) {
         extracted_events.push(event["event_id"]);
       });
-      res.json(extracted_events);
+      res.json({
+        "eventIds": extracted_events
+      });
     });
   });
 
