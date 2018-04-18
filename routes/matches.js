@@ -205,6 +205,7 @@ router.route('/like')
               ).then(() => {});
               if (req.body.like == 'false') {
                 res.json({
+                  match: '0',
                   message: 'Success, user \'' + fb_id
                     + '\' disliked the next user in the queue', 
                   req: req.body
@@ -219,29 +220,47 @@ router.route('/like')
                   fb_id: liked_fb_id,
                   liked_fb_id: fb_id
                 }
-              }).then(is_match => {
-                if(is_match.length != 0) {
-                  // TODO: signal app somehow??
+              }).then(match => {
+                if(match.length != 0) {
                   Matches.bulkCreate([
                     { fb_id: fb_id, matched_fb_id: liked_fb_id },
                     { fb_id: liked_fb_id, matched_fb_id: fb_id }
                   ]);
+                  User.findById(liked_fb_id)
+                    .then(liked_user => {
+                      var liked_firebase_token = liked_user.firebase_token;
+                      Liked_Users.create({
+                        fb_id: fb_id,
+                        event_id: req.body.event_id,
+                        liked_fb_id: liked_fb_id
+                      }).then(liked_user => {
+                        res.json({
+                          match: '1',
+                          liked_firebase_token: liked_firebase_token,
+                          message: 'Success, user \'' + fb_id
+                            + '\' liked user \'' + liked_fb_id + '\'',
+                          req: req.body
+                        });
+                      });
+                    });
+                } else {
+                  Liked_Users.create({
+                    fb_id: fb_id,
+                    event_id: req.body.event_id,
+                    liked_fb_id: liked_fb_id
+                  }).then(liked_user => {
+                    res.json({
+                      match: '0',
+                      message: 'Success, user \'' + fb_id
+                        + '\' liked user \'' + liked_fb_id + '\'',
+                      req: req.body
+                    });
+                  });
                 }
-              });
-              
-              Liked_Users.create({
-                fb_id: fb_id,
-                event_id: req.body.event_id,
-                liked_fb_id: liked_fb_id
-              }).then(liked_user => {
-                res.json({
-                  message: 'Success, user \'' + fb_id
-                    + '\' liked user \'' + liked_fb_id + '\'',
-                  req: req.body
-                });
               });
             } else {
               res.json({
+                match: '-1',
                 message: 'Error: there are no more users in the concert queue to like!',
                 req: req.body
               });
@@ -255,6 +274,7 @@ router.route('/like')
       })
       .catch(err => {
         res.json({
+          match: '-1',
           message: err.message,
           req: req.body
         });

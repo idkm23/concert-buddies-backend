@@ -5,5 +5,6 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
     },
     fb_token: DataTypes.TEXT,
+    firebase_token: DataTypes.TEXT,
   });
 };

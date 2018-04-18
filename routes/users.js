@@ -41,12 +41,14 @@ router.post('/', function(req, res) {
       if (existing_user == null) {
         User.create({
           fb_id: fb_res.id,
-          fb_token: req.body.fb_token
+          fb_token: req.body.fb_token,
+          firebase_token: req.body.firebase_token
         }).then(user => {
           res.json({ message: 'User Created', req: req.body, user: user });
         });
       } else {
         existing_user.fb_token = req.body.fb_token;
+        existing_user.firebase_token = req.body.firebase_token;
         existing_user.save().then(() => {}); 
         res.json({ message: 'User Updated', req: req.body, user: existing_user });
       }
