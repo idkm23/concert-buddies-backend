@@ -218,7 +218,8 @@ router.route('/like')
               Liked_Users.findAll({
                 where: {
                   fb_id: liked_fb_id,
-                  liked_fb_id: fb_id
+                  liked_fb_id: fb_id,
+                  event_id: req.body.event_id
                 }
               }).then(match => {
                 if(match.length != 0) {
