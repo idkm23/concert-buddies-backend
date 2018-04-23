@@ -21,6 +21,7 @@ router.route('/:fb_id')
           res.json({ messsage: !fb_res ? 'error occurred' : fb_res.error });
           return;
         }
+        fb_res.firebase_token = user.firebase_token;
         res.json(fb_res);
       });
     });
