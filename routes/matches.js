@@ -207,6 +207,7 @@ router.route('/like')
               if (req.body.like == 'false') {
                 res.json({
                   match: '0',
+                  liked_id: liked_fb_id,
                   message: 'Success, user \'' + fb_id
                     + '\' disliked the next user in the queue', 
                   req: req.body
@@ -239,6 +240,7 @@ router.route('/like')
                         res.json({
                           match: '1',
                           liked_firebase_token: liked_firebase_token,
+                          liked_id: liked_fb_id,
                           message: 'Success, user \'' + fb_id
                             + '\' liked user \'' + liked_fb_id + '\'',
                           req: req.body
@@ -253,6 +255,7 @@ router.route('/like')
                   }).then(liked_user => {
                     res.json({
                       match: '0',
+                      liked_id: liked_fb_id,
                       message: 'Success, user \'' + fb_id
                         + '\' liked user \'' + liked_fb_id + '\'',
                       req: req.body
