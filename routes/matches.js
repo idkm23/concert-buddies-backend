@@ -76,7 +76,8 @@ router.route('/get_potential_matches')
         var i = 0;
         var attempts = 0;
         if (profile_count == 0) {
-          res.json("[]");
+          var empty = [];
+          res.json(empty);
           return;
         }
         potential_users.forEach(function(potential_user) {
@@ -322,7 +323,8 @@ router.route('/')
         var i = 0;
         var attempts = 0;
         if (profile_count == 0) {
-          res.json("[]");
+          var empty = [];
+          res.json(empty);
           return;
         }
 
