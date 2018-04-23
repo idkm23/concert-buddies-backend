@@ -313,12 +313,55 @@ router.route('/')
         }
       })
       .then(matches_obj => {
-        matches = [];
+        var matches = [];
         matches_obj.forEach(function(match) {
           matches.push(match['matched_fb_id']);
         });
-        res.json({
-          "matches": matches
+        var profiles = [];
+        var profile_count = matches.length;
+        var i = 0;
+        var attempts = 0;
+        if (profile_count == 0) {
+          res.json("{}");
+          return;
+        }
+
+        matches.forEach(function(match_fb_id) {
+          var iter_num = i;
+          i += 1;
+
+          User.findById(match_fb_id, {}).then(user => {
+            if (user == null) {
+              profiles[iter_num] = {
+                id: match_fb_id,
+                message: "error: couldn't find token for this id, is this user in the database?"
+              };
+              attempts += 1;
+              if (attempts == profile_count) {
+                res.json(profiles);
+              }
+            } else {
+              FB.setAccessToken(user.fb_token);
+              FB.api('me/', {
+                fields: ['id', 'name', 'about', 'birthday', 'picture.width(640)']
+              }, 
+                function (fb_res) {
+                  if(!fb_res || fb_res.error) {
+                    console.log(!fb_res ? 'error occurred' : fb_res.error);
+                    profiles.push({
+                      id: match_fb_id,
+                      message: !fb_res ? 'error occurred' : fb_res.error
+                    });
+                  } else {
+                    profiles[iter_num] = fb_res;
+                  }
+                  attempts += 1;
+                  if (attempts == profile_count) {
+                    res.json(profiles);
+                  }
+                });
+            }
+          });
         });
       })
       .catch(err => {
