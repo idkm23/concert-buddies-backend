@@ -57,4 +57,21 @@ router.post('/', function(req, res) {
   });
 });
 
+/* SET FIREBASE TOKEN via POST
+ * example url: /users/set_firebase_token
+ **/
+router.post('/set_firebase_token', function(req, res) {
+  User.update(
+    { firebase_token: req.body.firebase_token },
+    { where: { fb_id: req.body.fb_id } })
+    .then(user => {
+      res.json({ message: 'Firebase token updated', req: req.body, user: user });
+    }).catch(err => {
+      res.json({
+        message: err.message,
+        req: req.body
+      });
+    });
+});
+
 module.exports = router;
